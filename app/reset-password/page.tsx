@@ -1,68 +1,74 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Eye, EyeOff, Lock, CheckCircle, AlertCircle, ArrowLeft } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Eye,
+  EyeOff,
+  Lock,
+  CheckCircle,
+  AlertCircle,
+  ArrowLeft,
+} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { updatePassword } from "../../lib/supabase";
 
 export default function ResetPasswordPage() {
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState("")
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const passwordRequirements = [
     { text: "At least 8 characters", met: password.length >= 8 },
     { text: "Contains uppercase letter", met: /[A-Z]/.test(password) },
     { text: "Contains lowercase letter", met: /[a-z]/.test(password) },
     { text: "Contains number", met: /\d/.test(password) },
-    { text: "Contains special character", met: /[!@#$%^&*(),.?":{}|<>]/.test(password) },
-  ]
+    {
+      text: "Contains special character",
+      met: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    },
+  ];
 
-  const isPasswordValid = passwordRequirements.every((req) => req.met)
-  const doPasswordsMatch = password === confirmPassword && password.length > 0
+  const isPasswordValid = passwordRequirements.every((req) => req.met);
+  const doPasswordsMatch = password === confirmPassword && password.length > 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!isPasswordValid) {
-      setError("Please meet all password requirements")
-      return
+      setError("Please meet all password requirements");
+      return;
     }
 
     if (!doPasswordsMatch) {
-      setError("Passwords do not match")
-      return
+      setError("Passwords do not match");
+      return;
     }
 
-    setIsLoading(true)
-    setError("")
+    setIsLoading(true);
+    setError("");
 
     try {
-      // Simulate API call - replace with actual Supabase password reset
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      const response = await updatePassword(password);
 
-      // Here you would integrate with Supabase:
-      // const { error } = await supabase.auth.updateUser({ password })
-      // if (error) throw error
-
-      setSuccess(true)
+      setSuccess(true);
     } catch (err) {
-      setError("Failed to reset password. Please try again.")
+      setError("Failed to reset password. Please try again.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (success) {
     return (
@@ -73,9 +79,12 @@ export default function ResetPasswordPage() {
               <CheckCircle className="w-8 h-8 text-[#2DE37D]" />
             </div>
 
-            <h1 className="text-2xl font-bold mb-4">Password Reset Successful!</h1>
+            <h1 className="text-2xl font-bold mb-4">
+              Password Reset Successful!
+            </h1>
             <p className="text-gray-300 mb-6">
-              Your password has been successfully updated. You can now sign in with your new password.
+              Your password has been successfully updated. You can now sign in
+              with your new password.
             </p>
 
             <Button
@@ -87,7 +96,7 @@ export default function ResetPasswordPage() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -96,7 +105,13 @@ export default function ResetPasswordPage() {
       <header className="border-b border-gray-800">
         <div className="container mx-auto px-4 py-4">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="/upmatch-logo.png" alt="UpMatch" width={32} height={32} className="rounded-lg" />
+            <Image
+              src="/upmatch-logo.png"
+              alt="UpMatch"
+              width={32}
+              height={32}
+              className="rounded-lg"
+            />
             <span className="text-xl font-bold">UpMatch</span>
           </Link>
         </div>
@@ -109,8 +124,12 @@ export default function ResetPasswordPage() {
             <div className="w-16 h-16 bg-[#2DE37D]/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Lock className="w-8 h-8 text-[#2DE37D]" />
             </div>
-            <CardTitle className="text-2xl font-bold text-white">Reset Your Password</CardTitle>
-            <p className="text-gray-300 mt-2">Enter your new password below. Make sure it's strong and secure.</p>
+            <CardTitle className="text-2xl font-bold text-white">
+              Reset Your Password
+            </CardTitle>
+            <p className="text-gray-300 mt-2">
+              Enter your new password below. Make sure it's strong and secure.
+            </p>
           </CardHeader>
 
           <CardContent className="space-y-6">
@@ -135,7 +154,11 @@ export default function ResetPasswordPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -143,12 +166,27 @@ export default function ResetPasswordPage() {
               {/* Password Requirements */}
               {password && (
                 <div className="space-y-2">
-                  <p className="text-sm text-gray-300">Password requirements:</p>
+                  <p className="text-sm text-gray-300">
+                    Password requirements:
+                  </p>
                   <div className="space-y-1">
                     {passwordRequirements.map((req, index) => (
-                      <div key={index} className="flex items-center space-x-2 text-sm">
-                        <CheckCircle className={`w-4 h-4 ${req.met ? "text-[#2DE37D]" : "text-gray-500"}`} />
-                        <span className={req.met ? "text-[#2DE37D]" : "text-gray-400"}>{req.text}</span>
+                      <div
+                        key={index}
+                        className="flex items-center space-x-2 text-sm"
+                      >
+                        <CheckCircle
+                          className={`w-4 h-4 ${
+                            req.met ? "text-[#2DE37D]" : "text-gray-500"
+                          }`}
+                        />
+                        <span
+                          className={
+                            req.met ? "text-[#2DE37D]" : "text-gray-400"
+                          }
+                        >
+                          {req.text}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -175,15 +213,29 @@ export default function ResetPasswordPage() {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
                   >
-                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
 
                 {/* Password Match Indicator */}
                 {confirmPassword && (
                   <div className="flex items-center space-x-2 text-sm">
-                    <CheckCircle className={`w-4 h-4 ${doPasswordsMatch ? "text-[#2DE37D]" : "text-gray-500"}`} />
-                    <span className={doPasswordsMatch ? "text-[#2DE37D]" : "text-gray-400"}>Passwords match</span>
+                    <CheckCircle
+                      className={`w-4 h-4 ${
+                        doPasswordsMatch ? "text-[#2DE37D]" : "text-gray-500"
+                      }`}
+                    />
+                    <span
+                      className={
+                        doPasswordsMatch ? "text-[#2DE37D]" : "text-gray-400"
+                      }
+                    >
+                      Passwords match
+                    </span>
                   </div>
                 )}
               </div>
@@ -234,5 +286,5 @@ export default function ResetPasswordPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
