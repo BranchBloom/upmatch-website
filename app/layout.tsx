@@ -4,9 +4,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.dev",
+  title: "UpMatch AI",
+  description: "UpMatch AI",
+  generator: "UpMatch AI",
 };
 
 export default function RootLayout({
