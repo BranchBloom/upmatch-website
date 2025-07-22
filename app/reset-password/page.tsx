@@ -26,7 +26,7 @@ export default function ResetPasswordPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(true);
   const [error, setError] = useState("");
 
   const passwordRequirements = [
@@ -81,7 +81,7 @@ export default function ResetPasswordPage() {
               <CheckCircle className="w-8 h-8 text-[#2DE37D]" />
             </div>
 
-            <h1 className="text-2xl font-bold mb-4">
+            <h1 className="text-2xl font-bold mb-4  text-slate-200">
               Password Reset Successful!
             </h1>
             <p className="text-gray-300 mb-6">
